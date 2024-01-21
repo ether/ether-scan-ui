@@ -8,7 +8,7 @@ import {Statistics} from "@/pages/statistics.tsx";
 import axios from "axios";
 
 const router = createBrowserRouter(createRoutesFromElements(
-    <Route path={import.meta.env.BASE_URL} element={<App/>}>
+    <Route path="/" element={<App/>}>
         <Route index  element={<Navigate to="/statistics"/>}/>
         <Route  path="/statistics" element={<Statistics/>}/>
     </Route>
