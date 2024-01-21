@@ -36,6 +36,10 @@ jobs:
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
       - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          registry: 'https://registry.npmjs.org'
+          cache: '~/.pnpm-store'
       - name: Install app dependencies
         run: pnpm install
         env:
