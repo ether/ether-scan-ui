@@ -6,11 +6,13 @@ import {createHashRouter, createRoutesFromElements, Navigate, Route} from "react
 import {RouterProvider} from "react-router";
 import {Statistics} from "@/pages/statistics.tsx";
 import axios from "axios";
+import {Instances} from "@/pages/instances.tsx";
 
 const router = createHashRouter(createRoutesFromElements(
     <Route element={<App/>}>
         <Route index  element={<Navigate to="/statistics"/>}/>
         <Route  path="/statistics" element={<Statistics/>}/>
+        <Route path={"/instances"} element={<Instances/>}/>
     </Route>
 ))
 

@@ -29,12 +29,15 @@ import {
     AreaChart,
     UserX2Icon,
     Database,
+    Circle,
     X,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+    alert: AlertTriangle,
+    circle: Circle,
     instances: Database,
     statistics: AreaChart,
     dashboard: LayoutDashboardIcon,
