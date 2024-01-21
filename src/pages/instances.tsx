@@ -84,7 +84,7 @@ export const Instances = ()=>{
                         <DialogTitle>Scan result from the {new Date(instance?.scan.scan_time!).toLocaleString()}</DialogTitle>
                         <DialogDescription>Instance {instance?.name}</DialogDescription>
                     </DialogHeader>
-                    <div className="flex flex-col gap-5">
+                    {instance&&<div className="flex flex-col gap-5">
                         <div className="grid grid-cols-2 gap-5">
                             <Card>
                                 <CardHeader>
@@ -122,6 +122,7 @@ export const Instances = ()=>{
                             </span>
                         }
                     </div>
+                    }
                 </DialogContent>
                 </DialogPortal>
             </Dialog>
