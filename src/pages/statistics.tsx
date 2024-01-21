@@ -9,7 +9,7 @@ export const Statistics = ()=>{
     const [stats, setStats] = useState<StatsResponse>()
 
     useEffect(() => {
-        axios.get("/api/stats")
+        axios.get("/stats")
             .then((res:AxiosResponse<StatsResponse>)=>{
                 setStats(res.data)
 
