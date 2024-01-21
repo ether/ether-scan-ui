@@ -12,7 +12,9 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route index  element={<Navigate to="/statistics"/>}/>
         <Route  path="/statistics" element={<Statistics/>}/>
     </Route>
-))
+),{
+    basename: import.meta.env.BASE_URL,
+})
 
 
 if (import.meta.env.PROD) {
