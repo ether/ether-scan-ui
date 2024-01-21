@@ -3,6 +3,7 @@ import {FC, useMemo} from "react";
 import {Bar} from "react-chartjs-2";
 import "chart.js/auto";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 
 type ApiVersionsProps = {
     stats: StatsResponse
@@ -23,7 +24,7 @@ export const ApiVersions: FC<ApiVersionsProps> = ({stats}) => {
         },
         [stats])
 
-    if(!labels||!data) return <div>Loading...</div>
+    if(!labels||!data) return <LoadingSpinner/>
 
    return <Card>
        <CardHeader>

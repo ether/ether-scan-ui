@@ -2,6 +2,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import {Bar} from "react-chartjs-2";
 import {StatsResponse} from "@/types/StatsResponse.ts";
 import {FC, useMemo} from "react";
+import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 
 type InstancesByVersionProps = {
     stats: StatsResponse
@@ -23,7 +24,7 @@ export const InstancesByVersion:FC<InstancesByVersionProps> = ({stats})=>{
         },
         [stats])
 
-    if(!labels||!data) return <div>Loading...</div>
+    if(!labels||!data) return  <LoadingSpinner/>
 
     return  <Card>
         <CardHeader>

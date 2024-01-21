@@ -53,9 +53,9 @@ export const Plugins:FC<PluginPros> = ({stats})=>{
                 </thead>
                 <tbody className="overflow-auto divide-y">
                 {
-                    currentPlugins.map((plugin) => {
+                    currentPlugins.map((plugin,i) => {
                         return (
-                            <tr className="">
+                            <tr className="" key={i}>
                                 <td className="p-0.5">{plugin.plugin}</td>
                                 <td className="text-center p-0.5">{plugin.count}</td>
                             </tr>

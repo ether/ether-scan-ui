@@ -9,16 +9,30 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 type CompProps = {};
-export default function ThemeToggle({}: CompProps) {
-    const setTheme = (theme: string) => {
-        if (theme === "system") {
-            theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-        }
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
+
+export const setTheme = (theme: string) => {
+    if (theme === "system") {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
     }
+    document.documentElement.setAttribute("class", theme);
+    localStorage.setItem("theme", theme);
+}
+
+export const initTheme = () => {
+    const theme = localStorage.getItem("theme");
+    if (!theme) {
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? setTheme("dark")
+            : setTheme("light");
+    } else {
+        setTheme(theme);
+    }
+}
+
+export default function ThemeToggle({}: CompProps) {
+
 
 
     return (
