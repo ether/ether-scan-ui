@@ -45,7 +45,7 @@ export const Instances = () => {
     if (!filteredInstances) return <LoadingSpinner/>
 
     return (
-        <div className="m-5"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
+        <div className="m-5 flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
             <div className="flex flex-row mb-5">
                 <Input type="text" placeholder="Enter your Etherpad url"
                        className=" border border-gray-400 rounded-md px-2 py-1 focus:outline-none focus:border-blue-400"
@@ -53,11 +53,11 @@ export const Instances = () => {
                            setFilter(e.target.value);
                        }}/>
             </div>
-            <ScrollArea className="md:m-5">
+            <ScrollArea className="md:m-5 flex flex-col h-[70vh]">
                 <table className="w-full">
                     <thead>
                     <tr>
-                        <td className="">Health</td>
+                        <td className="md:block hidden">Health</td>
                         <th className=" px-4 py-2">Name</th>
                         <th className=" px-4 py-2">Actions</th>
                     </tr>
