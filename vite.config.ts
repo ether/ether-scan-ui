@@ -13,6 +13,7 @@ export default defineConfig({
         },
     },
     server: {
+        host: '0.0.0.0',
         proxy: {
             "/api": {
                 target: "https://ether-scan.stefans-entwicklerecke.de/api",

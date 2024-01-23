@@ -23,10 +23,10 @@ export const Statistics = ()=>{
     return (
         <ScrollArea className="flex flex-col m-5 h-[99%]">
             <h1 className="text-4xl font-bold mb-5">Statistics</h1>
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Plugins stats={stats}/>
                     <ApiVersions stats={stats}/>
-                    <div className="col-span-2">
+                    <div className="col-span-1 md:col-span-2">
                         <InstancesByVersion stats={stats}/>
                     </div>
                 </div>

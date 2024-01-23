@@ -4,6 +4,7 @@ import {Outlet} from "react-router";
 import Sidebar from "@/components/layout/sidebar.tsx";
 import {useEffect} from "react";
 import {initTheme} from "@/components/layout/ThemeToggle/theme-toggle.tsx";
+import {MobileSidebar} from "@/components/layout/mobile-sidebar.tsx";
 
 const App = ()=>{
 
@@ -16,7 +17,8 @@ const App = ()=>{
             <Header />
             <div className="flex h-screen">
                 <Sidebar />
-                <main className="w-full mt-20">
+                <MobileSidebar/>
+                <main className="mt-20 w-full">
                     {<Outlet/>}
                 </main>
             </div>
