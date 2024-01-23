@@ -16,7 +16,7 @@ const App = ()=>{
             <Header />
             <div className="flex h-screen">
                 <Sidebar />
-                <main className="w-full mt-20">
+                <main className="mt-20 w-full">
                     {<Outlet/>}
                 </main>
             </div>

@@ -12,61 +12,61 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import { Input } from "@/components/ui/input"
+import {Input} from "@/components/ui/input"
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area"
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 
 
-export const Instances = ()=>{
-    const [instances,setInstances] = useState<InstancesResponse>()
-    const [filter,setFilter] = useState<string>("")
-    const filteredInstances = useMemo(()=>{
-            if (filter.length === 0) return instances?.instances
-            return instances?.instances.filter((instance)=>{
-                return instance.name.includes(filter)
-            })
-    },[instances, filter])
+export const Instances = () => {
+    const [instances, setInstances] = useState<InstancesResponse>()
+    const [filter, setFilter] = useState<string>("")
+    const filteredInstances = useMemo(() => {
+        if (filter.length === 0) return instances?.instances
+        return instances?.instances.filter((instance) => {
+            return instance.name.includes(filter)
+        })
+    }, [instances, filter])
     const [dialogOpen, setDialogOpen] = useState(false)
     const [instance, setInstance] = useState<Instance>()
 
     useEffect(() => {
         axios.get("/instances")
-            .then((res:AxiosResponse<InstancesResponse>)=>{
+            .then((res: AxiosResponse<InstancesResponse>) => {
                 setInstances(res.data)
 
             })
     }, [])
 
-    const isOldVersion = (version:string)=>{
-        const replacedVersion = version.replaceAll(".","")
+    const isOldVersion = (version: string) => {
+        const replacedVersion = version.replaceAll(".", "")
         return replacedVersion < "190"
     }
 
-    if(!filteredInstances) return <LoadingSpinner/>
+    if (!filteredInstances) return <LoadingSpinner/>
 
     return (
-        <ScrollArea className="m-5 h-[95%]">
         <div className="m-5"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
             <div className="flex flex-row mb-5">
                 <Input type="text" placeholder="Enter your Etherpad url"
-                       className="w-full border border-gray-400 rounded-md px-2 py-1 focus:outline-none focus:border-blue-400"
+                       className=" border border-gray-400 rounded-md px-2 py-1 focus:outline-none focus:border-blue-400"
                        onChange={(e) => {
                            setFilter(e.target.value);
                        }}/>
             </div>
+            <ScrollArea className="md:m-5">
                 <table className="w-full">
                     <thead>
                     <tr>
-                        <td>Health</td>
-                        <th className="px-4 py-2">Version</th>
-                        <th className="px-4 py-2">Actions</th>
+                        <td className="">Health</td>
+                        <th className=" px-4 py-2">Name</th>
+                        <th className=" px-4 py-2">Actions</th>
                     </tr>
                     </thead>
-                    <tbody className="overflow-auto">
+                    <tbody className="">
                     {filteredInstances.map((instance) => {
                         return (
                             <tr key={instance.name}>
-                                <td className="border px-4 py-2">{isOldVersion(instance.scan.version) ?
+                                <td className="hidden md:block border px-4 py-2">{isOldVersion(instance.scan.version) ?
                                     <AlertTriangle className="text-yellow-400"/> : <Check/>}</td>
                                 <td className="border px-4 py-2 cursor-pointer" onClick={() => {
                                     if (!instance.name.startsWith("http")) {
@@ -83,6 +83,8 @@ export const Instances = ()=>{
                     })}
                     </tbody>
                 </table>
+                <ScrollBar orientation="vertical"/>
+            </ScrollArea>
             <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(!dialogOpen)}>
                 <DialogPortal>
                     <DialogContent>
@@ -130,9 +132,8 @@ export const Instances = ()=>{
                         </div>}
                     </DialogContent>
                 </DialogPortal>
-            </Dialog></div>
-            <ScrollBar orientation="vertical"/>
-        </ScrollArea>
+            </Dialog>
+        </div>
 
     )
 }
