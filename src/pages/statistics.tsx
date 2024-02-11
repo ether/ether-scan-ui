@@ -27,7 +27,7 @@ export const Statistics = ()=>{
                     <Plugins stats={stats}/>
                     <ApiVersions stats={stats}/>
                     <div className="col-span-1 md:col-span-2">
-                        <InstancesByVersion stats={stats}/>
+                        <InstancesByVersion/>
                     </div>
                 </div>
                 <ScrollBar orientation="vertical"/>

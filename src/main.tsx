@@ -7,6 +7,7 @@ import {RouterProvider} from "react-router";
 import {Statistics} from "@/pages/statistics.tsx";
 import axios from "axios";
 import {Instances} from "@/pages/instances.tsx";
+import {Toaster} from "@/components/ui/toaster.tsx";
 
 const router = createHashRouter(createRoutesFromElements(
     <Route element={<App/>}>
@@ -22,6 +23,7 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+      <Toaster />
     <RouterProvider router={router}/>
   </React.StrictMode>,
 )

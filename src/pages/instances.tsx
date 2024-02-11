@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from "react";
-import axios, {AxiosResponse} from "axios";
+import axios, {AxiosError, AxiosResponse} from "axios";
 import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
-import {AlertTriangle, Check, NotepadText} from 'lucide-react'
+import {AlertTriangle, Check, NotepadText, PlusIcon} from 'lucide-react'
 
 import {
     Dialog,
@@ -15,6 +15,9 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import {Input} from "@/components/ui/input"
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area"
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {InstanceResponseError} from "@/types/InstanceResponseError.ts";
+import {useToast} from "@/components/ui/use-toast.ts";
 
 
 export const Instances = () => {
@@ -28,6 +31,7 @@ export const Instances = () => {
     }, [instances, filter])
     const [dialogOpen, setDialogOpen] = useState(false)
     const [instance, setInstance] = useState<Instance>()
+    const {toast} = useToast()
 
     useEffect(() => {
         axios.get("/instances")
@@ -62,7 +66,8 @@ export const Instances = () => {
                         <th className=" px-4 py-2">Actions</th>
                     </tr>
                     </thead>
-                    <tbody className="">
+                    {filteredInstances.length > 0 ? <tbody className="">
+
                     {filteredInstances.map((instance) => {
                         return (
                             <tr key={instance.name}>
@@ -81,8 +86,45 @@ export const Instances = () => {
                             </tr>
                         );
                     })}
-                    </tbody>
+                    </tbody> : <tbody>
+                    <tr>
+                        <td className="text-center" colSpan={3}>No instance found for the url. You can request a scan via the button below</td>
+                    </tr>
+                    </tbody>}
                 </table>
+                <div className="w-full flex items-center mt-5">
+                    {filteredInstances.length == 0 && <Button className="mx-auto" onClick={() => {
+                        toast({
+                            className: 'bg-green-500',
+                            title: 'Scan started',
+                            description: 'The scan has started, it will take some time to complete'
+                        })
+
+                        axios.post('/scan', null, {
+                            params: {
+                                url: filter
+                            }
+                        })
+                            .then((instance: AxiosResponse<Instance>) => {
+                                const resultingInstances: InstancesResponse = {
+                                    ...instances,
+                                    instances: [...instances?.instances!, instance.data]
+                                }
+                                setInstances(resultingInstances)
+                                setInstance(instance.data)
+                                setDialogOpen(true)
+
+                            })
+                            .catch((e: AxiosError<InstanceResponseError>) => {
+                                toast({
+                                    className: 'bg-red-500',
+                                    title: 'Error requesting scan',
+                                    description: e.response?.data.error,
+                                })
+                            })
+                    }}><PlusIcon/>Start scan</Button>
+                    }
+                </div>
                 <ScrollBar orientation="vertical"/>
             </ScrollArea>
             <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(!dialogOpen)}>
