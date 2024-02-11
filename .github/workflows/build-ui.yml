@@ -47,8 +47,6 @@ jobs:
           cache: '~/.pnpm-store'
       - name: Install app dependencies
         run: pnpm install
-        env:
-          CI: true
       - name: Build app
         run: pnpm run build
       - name: Upload artifact
