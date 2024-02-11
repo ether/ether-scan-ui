@@ -10,16 +10,15 @@ type InstancesByVersionProps = {
 
 
 export const InstancesByVersion:FC<InstancesByVersionProps> = ({stats})=>{
-    const labels = useMemo(()=>Object.keys(stats.versions),
+    const labels = useMemo(()=>Object.keys(stats.versions).reverse(),
         [stats])
     const data = useMemo(()=>{
             return [
                 {
                     label: "API Versions",
-                    data: Object.values(stats.versions),
+                    data: Object.values(stats.versions).reverse(),
                     backgroundColor: "#44b492",
                 },
-
             ]
         },
         [stats])
