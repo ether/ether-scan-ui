@@ -37,13 +37,28 @@ export const InstancesByVersion: FC = () => {
             return acc
         },[]).reverse()
 
-        const datasets = Array.from(map).map(([_, value]) => {
+
+        let datasets = Array.from(map).map(([_, value]) => {
             return {
                 label: value[0].version,
                 data: value.map(v => v.count),
                 fill: false,
             } satisfies ChartDataset<"line", number>
-        }).reverse()
+        }).reverse().slice(-10)
+
+        let normalizedCount = datasets[0].data.length
+
+        // Normalize the data
+        datasets = datasets.map((dataset) => {
+            if (dataset.data.length < normalizedCount) {
+                const diff = normalizedCount - dataset.data.length
+                for (let i = 0; i < diff; i++) {
+                    dataset.data.unshift(0)
+                }
+            }
+            return dataset
+        })
+
 
         return {
             labels,
