@@ -8,17 +8,6 @@ import {ChartData} from "chart.js";
 // @ts-ignore
 import {ChartDataset} from "chart.js/dist/types";
 
-function generateMatchingColors(num: number): string[] {
-    let colors: string[] = [];
-    let saturation = 100;
-    let lightness = 60;
-    for(let i = 0; i < num; i++) {
-        let hue = (i * 360 / num) % 360;
-        colors.push(`hsla(${hue},${saturation}%,${lightness}%,1)`);
-    }
-    return colors;
-}
-
 export const InstancesByVersion: FC = () => {
     const [historyData, setHistoryData] = useState<HistoryResponse>()
     const data:any = useMemo(() => {
@@ -46,7 +35,6 @@ export const InstancesByVersion: FC = () => {
             })
         })
 
-        const matchingColors = generateMatchingColors(map.size)
         // fill in the gaps
         map.forEach((value, key) => {
             const missing = labels.filter(label => !value.some(v => `${v.year}-${v.month}` === label))
@@ -64,10 +52,17 @@ export const InstancesByVersion: FC = () => {
                 label: value[0].version,
                 data: value.map(v => v.count),
                 fill: false,
-                borderColor: matchingColors.shift(),
             } satisfies ChartDataset<"line", number>
+            // @ts-ignore
         }).sort((a, b) => {
-            return a.label.localeCompare(b.label)
+            // compare version numbers
+            const aVersion = a.label.split(".").map((v: string) => parseInt(v))
+            const bVersion = b.label.split(".").map((v: string) => parseInt(v))
+            for (let i = 0; i < aVersion.length; i++) {
+                if (aVersion[i] < bVersion[i]) return -1
+                if (aVersion[i] > bVersion[i]) return 1
+                if (i === aVersion.length - 1) return 0
+            }
         }).slice(-10)
 
         return {
