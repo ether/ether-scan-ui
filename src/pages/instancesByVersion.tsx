@@ -2,63 +2,73 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx
 import {FC, useEffect, useMemo, useState} from "react";
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 import axios, {AxiosResponse} from "axios";
-import {History, HistoryResponse} from "@/types/HistoryResponse.ts";
+import {HistoryResponse, HistoryVersionCountPerMonth} from "@/types/HistoryResponse.ts";
 import {Line} from "react-chartjs-2";
 import {ChartData} from "chart.js";
 // @ts-ignore
 import {ChartDataset} from "chart.js/dist/types";
 
+function generateMatchingColors(num: number): string[] {
+    let colors: string[] = [];
+    let saturation = 100;
+    let lightness = 60;
+    for(let i = 0; i < num; i++) {
+        let hue = (i * 360 / num) % 360;
+        colors.push(`hsla(${hue},${saturation}%,${lightness}%,1)`);
+    }
+    return colors;
+}
+
 export const InstancesByVersion: FC = () => {
     const [historyData, setHistoryData] = useState<HistoryResponse>()
     const data:any = useMemo(() => {
-        if (!historyData || !historyData.versions) return {}
-        const map = new Map<string, History[]>
-        historyData?.versions.forEach(h => {
-            if (!map.has(h.version)) {
-                map.set(h.version, [])
-            }
-            map.get(h.version)?.push(h)
-        })
+        if (!historyData || !historyData.history) return {}
+        const map = new Map<string, HistoryVersionCountPerMonth[]>
+        const labels = new Array<string>
 
-        map.forEach((value, key) => {
-            const sortedVals = value.sort((a, b) => {
-                if (a.created_year !== b.created_year) {
-                    return a.created_year - b.created_year
-                }
-                return a.created_month - b.created_month
+
+        historyData.history.map((year) => {
+            year.months.forEach((month) => {
+                    labels.push(`${year.year}-${month.month}`)
             })
-            map.set(key, sortedVals)
         })
 
-        const labels: string[] = historyData.versions.reduce((acc:string[], curr) => {
-            if (!acc.includes(curr.created_year+ "-" + curr.created_month)) {
-                acc.push(curr.created_year+ "-" + curr.created_month)
-            }
-            return acc
-        },[]).reverse()
 
+        historyData.history.map((year) => {
+            year.months.forEach((month) => {
+                month.versions.forEach((version) => {
+                    if (map.has(version.version)) {
+                        map.get(version.version)?.push({version: version.version, count: version.count, month: month.month, year: year.year})
+                    } else {
+                        map.set(version.version, [{version: version.version, count: version.count, month: month.month, year: year.year}])
+                    }
+                })
+            })
+        })
 
+        const matchingColors = generateMatchingColors(map.size)
+        // fill in the gaps
+        map.forEach((value, key) => {
+            const missing = labels.filter(label => !value.some(v => `${v.year}-${v.month}` === label))
+            missing.forEach(m => {
+                value.push({version: key, count: 0, month: parseInt(m.split("-")[1]), year: parseInt(m.split("-")[0])})
+            })
+            value.sort((a, b) => {
+                return a.year - b.year || a.month - b.month
+            })
+        })
+
+        // Limit to last 10 versions
         let datasets = Array.from(map).map(([_, value]) => {
             return {
                 label: value[0].version,
                 data: value.map(v => v.count),
                 fill: false,
+                borderColor: matchingColors.shift(),
             } satisfies ChartDataset<"line", number>
-        }).reverse().slice(-10)
-
-        let normalizedCount = datasets[0].data.length
-
-        // Normalize the data
-        datasets = datasets.map((dataset) => {
-            if (dataset.data.length < normalizedCount) {
-                const diff = normalizedCount - dataset.data.length
-                for (let i = 0; i < diff; i++) {
-                    dataset.data.unshift(0)
-                }
-            }
-            return dataset
-        })
-
+        }).sort((a, b) => {
+            return a.label.localeCompare(b.label)
+        }).slice(-10)
 
         return {
             labels,
