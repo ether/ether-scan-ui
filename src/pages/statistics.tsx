@@ -23,6 +23,7 @@ export const Statistics = ()=>{
     return (
         <ScrollArea className="flex flex-col m-5 h-[99%]">
             <h1 className="text-4xl font-bold mb-5">Statistics</h1>
+            <p>This is an overview of etherpad instances scanned by the <a href="https://github.com/gared/ether-scan">etherpad scanner</a></p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <Plugins stats={stats}/>
                     <ApiVersions stats={stats}/>
