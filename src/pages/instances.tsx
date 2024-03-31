@@ -51,8 +51,8 @@ export const Instances = () => {
     return (
         <div className="m-5 flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
             <p>
-                This is an overview of all scanned Etherpad instances. You can start a new scan by entering the url of
-                the instance and clicking on the "Start scan" button.
+                This is an overview of all scanned Etherpad instances. You can start a new scan by entering the URL of
+                the instance and clicking on the <code className="border border-gray-400 bg-accent">Start scan</code> button.
                 <br/>
                 If you want to see the scan result of a specific instance, click on the notepad icon.
             </p>
