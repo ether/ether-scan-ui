@@ -50,6 +50,12 @@ export const Instances = () => {
 
     return (
         <div className="m-5 flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
+            <p>
+                This is an overview of all scanned Etherpad instances. You can start a new scan by entering the URL of
+                the instance and clicking on the <code className="border border-gray-400 bg-accent">Start scan</code> button.
+                <br/>
+                If you want to see the scan result of a specific instance, click on the notepad icon.
+            </p>
             <div className="flex flex-row mb-5">
                 <Input type="text" placeholder="Enter your Etherpad url"
                        className=" border border-gray-400 rounded-md px-2 py-1 focus:outline-none focus:border-blue-400"
@@ -58,7 +64,7 @@ export const Instances = () => {
                        }}/>
             </div>
             <ScrollArea className="md:m-5 flex flex-col h-[70vh]">
-                <table className="w-full">
+                <table className="w-full break-all">
                     <thead>
                     <tr>
                         <td className="md:block hidden">Health</td>
