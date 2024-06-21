@@ -11,5 +11,8 @@ type ScanResult = {
     api_version: string,
     version: string,
     scan_time: string,
-    plugins: string[]
+    plugins: string[],
+    websocket_available: boolean,
+    db_reads_failed: number,
+    db_writes_failed: number,
 }
