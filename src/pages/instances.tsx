@@ -48,7 +48,7 @@ export const Instances = () => {
 
     if (!filteredInstances) return <LoadingSpinner/>
 
-    const dbFailures = instance?.scan.db_reads_failed + instance?.scan.db_writes_failed
+    const dbFailures = (instance?.scan.db_reads_failed || 0) + (instance?.scan.db_writes_failed || 0)
 
     return (
         <div className="m-5 flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
