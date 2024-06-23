@@ -12,7 +12,7 @@ type ScanResult = {
     version: string,
     scan_time: string,
     plugins: string[],
-    websocket_available: boolean,
+    websocket_available: boolean | null,
     db_reads_failed: number,
     db_writes_failed: number,
 }

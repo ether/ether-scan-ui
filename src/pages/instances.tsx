@@ -169,7 +169,7 @@ export const Instances = () => {
                                         </CardHeader>
                                         <CardContent>
                                             <ul className="list-disc ml-5">
-                                                { instance?.scan.websocket_available && <li>Websocket supported: {instance?.scan.websocket_available ? <span>Yes</span> : <span className="text-red-700">No</span>}</li> }
+                                                { instance?.scan.websocket_available !== null && <li>Websocket supported: {instance?.scan.websocket_available ? <span>Yes</span> : <span className="text-red-700">No</span>}</li> }
                                                 <li>DB failures: {dbFailures}</li>
                                             </ul>
                                         </CardContent>
