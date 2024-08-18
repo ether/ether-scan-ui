@@ -94,6 +94,9 @@ export const Instances = () => {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="">
+                        <DropdownMenuItem key={"Reset"} onClick={() => setFilteredVersion("")}>
+                            Reset
+                        </DropdownMenuItem>
                         {
                             filterableVersions?.map((version) => {
                                 return (
