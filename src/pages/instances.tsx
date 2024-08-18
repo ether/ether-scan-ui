@@ -43,7 +43,7 @@ export const Instances = () => {
 
     const isOldVersion = (version: string) => {
         const replacedVersion = version.replaceAll(".", "")
-        return replacedVersion < "190"
+        return replacedVersion < "200"
     }
 
     if (!filteredInstances) return <LoadingSpinner/>
