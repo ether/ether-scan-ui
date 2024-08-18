@@ -18,17 +18,36 @@ import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {InstanceResponseError} from "@/types/InstanceResponseError.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 
 export const Instances = () => {
     const [instances, setInstances] = useState<InstancesResponse>()
+    const [filterableVersions, setFilterableVersions] = useState<string[]>()
     const [filter, setFilter] = useState<string>("")
+    const [filteredVersion, setFilteredVersion] = useState<string>("")
     const filteredInstances = useMemo(() => {
-        if (filter.length === 0) return instances?.instances
-        return instances?.instances.filter((instance) => {
-            return instance.name.includes(filter)
-        })
-    }, [instances, filter])
+        let filteredInstances = instances?.instances
+
+        if (filter.length >0) {
+            filteredInstances = instances?.instances.filter((instance) => {
+                return instance.name.includes(filter)
+            })
+        }
+
+        if (filteredVersion.length > 0 ) {
+            filteredInstances = filteredInstances?.filter((instance) => {
+                return instance.scan.version.startsWith(filteredVersion)
+            })
+        }
+
+        return filteredInstances
+    }, [instances, filter, filteredVersion])
     const [dialogOpen, setDialogOpen] = useState(false)
     const [instance, setInstance] = useState<Instance>()
     const {toast} = useToast()
@@ -37,7 +56,11 @@ export const Instances = () => {
         axios.get("/instances")
             .then((res: AxiosResponse<InstancesResponse>) => {
                 setInstances(res.data)
-
+                const filterableVersions = new Set<string>()
+                res.data.instances.forEach((instance) => {
+                    filterableVersions.add(instance.scan.version.substring(0, instance.scan.version.lastIndexOf(".")))
+                })
+                setFilterableVersions(Array.from(filterableVersions))
             })
     }, [])
 
@@ -58,12 +81,30 @@ export const Instances = () => {
                 <br/>
                 If you want to see the scan result of a specific instance, click on the notepad icon.
             </p>
-            <div className="flex flex-row mb-5">
+            <div className="flex flex-row mb-5 gap-5">
                 <Input type="text" placeholder="Enter your Etherpad url"
                        className=" border border-gray-400 rounded-md px-2 py-1 focus:outline-none focus:border-blue-400"
                        onChange={(e) => {
                            setFilter(e.target.value);
                        }}/>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon">
+                            <span className=" text-white">{filteredVersion? filteredVersion: '?'}</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="">
+                        {
+                            filterableVersions?.map((version) => {
+                                return (
+                                    <DropdownMenuItem key={version} onClick={() => setFilteredVersion(version)}>
+                                        {version}
+                                    </DropdownMenuItem>
+                                )
+                            })
+                        }
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
             <ScrollArea className="md:m-5 flex flex-col h-[70vh]">
                 <table className="w-full break-all">
@@ -182,7 +223,7 @@ export const Instances = () => {
                                         </CardHeader>
                                         <CardContent className="">
                                             <ul className="list-disc ml-5">{instance?.scan.plugins.map(p =>
-                                                <li>{p}</li>)}</ul>
+                                                <li key={p}>{p}</li>)}</ul>
                                         </CardContent>
                                     </Card>
                                 </div>
