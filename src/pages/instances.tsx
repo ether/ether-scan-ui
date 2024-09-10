@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useState} from "react";
 import axios, {AxiosError, AxiosResponse} from "axios";
-import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
+import {Instance, InstancesResponse, PluginData} from "@/types/InstancesResponse.ts";
 import {AlertTriangle, Check, NotepadText, PlusIcon} from 'lucide-react'
 
 import {
@@ -67,6 +67,16 @@ export const Instances = () => {
     const isOldVersion = (version: string) => {
         const replacedVersion = version.replaceAll(".", "")
         return replacedVersion < "200"
+    }
+
+    const renderPluginInfo = (plugin: PluginData) => {
+        if (plugin.update_available) {
+            return <span className="text-red-700">
+                {plugin.name} (Update available: {plugin.version} => {plugin.latest_version})
+            </span>
+        }
+
+        return <>{plugin.name} ({plugin.version})</>
     }
 
     if (!filteredInstances) return <LoadingSpinner/>
@@ -225,8 +235,9 @@ export const Instances = () => {
                                             <CardTitle>Plugins</CardTitle>
                                         </CardHeader>
                                         <CardContent className="">
-                                            <ul className="list-disc ml-5">{instance?.scan.plugins.map(p =>
-                                                <li key={p}>{p}</li>)}</ul>
+                                            <ul className="list-disc ml-5">{instance?.scan.plugin_data.map(p =>
+                                                <li key={p.name}>{renderPluginInfo(p)}</li>)}
+                                            </ul>
                                         </CardContent>
                                     </Card>
                                 </div>
