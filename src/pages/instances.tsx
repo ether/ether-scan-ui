@@ -72,7 +72,7 @@ export const Instances = () => {
     const renderPluginInfo = (plugin: PluginData) => {
         if (plugin.update_available) {
             return <span className="text-red-700">
-                {plugin.name} (Update available: {plugin.version} => {plugin.latest_version})
+                {plugin.name} (Update available: {plugin.version} {'=>'} {plugin.latest_version})
             </span>
         }
 
