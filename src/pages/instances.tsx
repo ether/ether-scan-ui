@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useState} from "react";
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {Instance, InstancesResponse, PluginData} from "@/types/InstancesResponse.ts";
-import {AlertTriangle, Check, NotepadText, PlusIcon} from 'lucide-react'
+import {AlertTriangle, Check, Lock, NotepadText, PlusIcon} from 'lucide-react'
 
 import {
     Dialog,
@@ -123,9 +123,9 @@ export const Instances = () => {
                 <table className="w-full break-all">
                     <thead>
                     <tr>
-                        <td className="md:block hidden">Health</td>
-                        <th className=" px-4 py-2">Name</th>
-                        <th className=" px-4 py-2">Actions</th>
+                        <th className="md:block hidden">Health</th>
+                        <th className="px-4 py-2">Name</th>
+                        <th className="px-4 py-2">Actions</th>
                     </tr>
                     </thead>
                     {filteredInstances.length > 0 ? <tbody className="">
@@ -133,8 +133,12 @@ export const Instances = () => {
                     {filteredInstances.map((instance) => {
                         return (
                             <tr key={instance.name}>
-                                <td className="hidden md:block border px-4 py-2">{isOldVersion(instance.scan.version) ?
-                                    <AlertTriangle className="text-yellow-400"/> : <Check/>}</td>
+                                <td className="hidden md:block border px-4 py-2">
+                                    <div className={"flex gap-2"}>
+                                        {isOldVersion(instance.scan.version) ? <AlertTriangle className="text-yellow-400"/> : <Check/>}
+                                        {instance.scan.is_public === false && <Lock className="text-red-700"/>}
+                                    </div>
+                                </td>
                                 <td className="border px-4 py-2 cursor-pointer" onClick={() => {
                                     if (!instance.name.startsWith("http")) {
                                         instance.name = "http://" + instance.name;
@@ -247,6 +251,10 @@ export const Instances = () => {
                                     <AlertTriangle className="text-yellow-400 w-16 h-16"/>
                                     <span className="text-red-700 font-bold mt-2">Your Etherpad version is really outdated. Consider upgrading to a newer version.</span>
                                 </span>}
+                            {instance.scan.is_public === false && <span className="flex gap-5">
+                                <Lock className="text-red-700 w-16 h-16"/>
+                                <span className="font-bold mt-2">Your Etherpad instance is not public. This means it can only be accessed by authenticated users.</span>
+                            </span>}
                         </div>}
                     </DialogContent>
                 </DialogPortal>
