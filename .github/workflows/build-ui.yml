@@ -31,7 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: corepack enable pnpm
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Setup Node.js Environment
