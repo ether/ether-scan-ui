@@ -32,6 +32,7 @@ import {
     Database,
     Circle,
     X,
+    Home,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -66,6 +67,7 @@ export const Icons = {
     pizza: Pizza,
     sun: SunMedium,
     moon: Moon,
+    home: Home,
     laptop: Laptop,
     gitHub: ({ ...props }: LucideProps) => (
         <svg

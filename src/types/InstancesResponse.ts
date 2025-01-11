@@ -14,6 +14,7 @@ type ScanResult = {
     scan_time: string,
     plugins: string[],
     plugin_data: PluginData[],
+    mean_connects: number | null,
     websocket_available: boolean | null,
     db_reads_failed: number,
     db_writes_failed: number,
