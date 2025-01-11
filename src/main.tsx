@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import {createHashRouter, createRoutesFromElements, Navigate, Route} from "react-router-dom";
+import {createHashRouter, createRoutesFromElements, Route} from "react-router-dom";
 import {RouterProvider} from "react-router";
 import {Statistics} from "@/pages/statistics.tsx";
 import axios from "axios";
