@@ -4,7 +4,7 @@ name: Deploy scanner-ui to GitHub Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: []
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -47,10 +47,12 @@ jobs:
       - name: Build app
         run: pnpm run build
       - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: './dist'
       - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
         id: deployment
         uses: actions/deploy-pages@v4
