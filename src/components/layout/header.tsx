@@ -1,6 +1,6 @@
 import ThemeToggle from "@/components/layout/ThemeToggle/theme-toggle";
 import { cn } from "@/lib/utils";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import Logo from '../../assets/etherpad.svg?react'
 import {MobileSidebar} from "@/components/layout/mobile-sidebar.tsx";
 export default function Header() {
