@@ -22,8 +22,8 @@ export const InstancesByVersion: FC = () => {
             })
         })
 
-        let dataAdded = new Array<>
-        let dataRemoved = new Array<>
+        let dataAdded = new Array<number>
+        let dataRemoved = new Array<number>
 
         historyData.history.map((year) => {
             year.months.forEach((month) => {
