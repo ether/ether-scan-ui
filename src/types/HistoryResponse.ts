@@ -17,9 +17,18 @@ export type HistoryVersionCountPerMonth = {
     year: number
 }
 
+export type HistoryCountPerMonth = {
+    added: number,
+    removed: number,
+    month: number,
+    year: number
+}
+
 export type HistoryMonthResponse = {
     month: number,
     versions: HistoryVersionCountPerMonth[]
+    added: number,
+    removed: number,
 }
 
 export type HistoryResponse = {
