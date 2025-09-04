@@ -22,9 +22,14 @@ export const InstancesByVersion: FC = () => {
             })
         })
 
+        let dataAdded = new Array<number>
+        let dataRemoved = new Array<number>
 
         historyData.history.map((year) => {
             year.months.forEach((month) => {
+                dataAdded.push(month.added)
+                dataRemoved.push(month.removed * -1)
+
                 month.versions.forEach((version) => {
                     if (map.has(version.version)) {
                         map.get(version.version)?.push({version: version.version, count: version.count, month: month.month, year: year.year})
@@ -65,6 +70,18 @@ export const InstancesByVersion: FC = () => {
             }
         }).slice(-10)
 
+        datasets.push({
+            type: 'bar' as const,
+            label: "Instances added",
+            data: dataAdded,
+        })
+
+        datasets.push({
+            type: 'bar' as const,
+            label: "Instances removed",
+            data: dataRemoved,
+        })
+
         return {
             labels,
             datasets
@@ -88,10 +105,18 @@ export const InstancesByVersion: FC = () => {
             <CardTitle className="font-bold text-xl">Etherpad version count</CardTitle>
         </CardHeader>
         <CardContent>
-            <Line data={{
-                labels: data.labels,
-                datasets: data.datasets
-            }}/>
+            <Line
+                options={{
+                    scales: {
+                        x: {
+                            stacked: true,
+                        }
+                    }
+                }}
+                data={{
+                    labels: data.labels,
+                    datasets: data.datasets
+                }}/>
         </CardContent>
     </Card>
 }
