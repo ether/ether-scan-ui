@@ -1,20 +1,19 @@
 import {Plugins} from "@/pages/plugins.tsx";
 import {useEffect, useState} from "react";
-import axios, {AxiosResponse} from "axios";
 import {StatsResponse} from "@/types/StatsResponse.ts";
 import {ApiVersions} from "@/pages/apiVersions.tsx";
 import {InstancesByVersion} from "@/pages/instancesByVersion.tsx";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
+import {apiGet} from "@/lib/api.ts";
 
 export const Statistics = ()=>{
     const [stats, setStats] = useState<StatsResponse>()
 
     useEffect(() => {
-        axios.get("/stats")
-            .then((res:AxiosResponse<StatsResponse>)=>{
-                setStats(res.data)
-
+        apiGet<StatsResponse>("/stats")
+            .then((res)=>{
+                setStats(res)
             })
     }, [])
 

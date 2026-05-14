@@ -1,5 +1,4 @@
 import {useEffect, useMemo, useState} from "react";
-import axios, {AxiosError, AxiosResponse} from "axios";
 import {Instance, InstancesResponse, PluginData} from "@/types/InstancesResponse.ts";
 import {AlertTriangle, Check, Lock, NotepadText, PlusIcon} from 'lucide-react'
 
@@ -18,6 +17,7 @@ import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {InstanceResponseError} from "@/types/InstanceResponseError.ts";
 import {useToast} from "@/components/ui/use-toast.ts";
+import {ApiError, apiGet, apiPost} from "@/lib/api.ts";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -53,15 +53,17 @@ export const Instances = () => {
     const {toast} = useToast()
 
     useEffect(() => {
-        axios.get("/instances")
-            .then((res: AxiosResponse<InstancesResponse>) => {
-                setInstances(res.data)
+        const fetchInstances = async () => {
+            const response = await apiGet<InstancesResponse>("/instances")
+                setInstances(response)
                 const filterableVersions = new Set<string>()
-                res.data.instances.forEach((instance) => {
+                response.instances.forEach((instance) => {
                     filterableVersions.add(instance.scan.version.substring(0, instance.scan.version.lastIndexOf(".")))
                 })
                 setFilterableVersions(Array.from(filterableVersions))
-            })
+        }
+
+        void fetchInstances()
     }, [])
 
     const isOldVersion = (version: string) => {
@@ -88,7 +90,7 @@ export const Instances = () => {
     const dbFailures = (instance?.scan.db_reads_failed || 0) + (instance?.scan.db_writes_failed || 0)
 
     return (
-        <div className="m-5 flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
+        <div className="flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
             <p>
                 This is an overview of all scanned Etherpad instances. You can start a new scan by entering the URL of
                 the instance and clicking on the <code className="border border-gray-400 bg-accent">Start scan</code> button.
@@ -170,26 +172,26 @@ export const Instances = () => {
                             description: 'The scan has started, it will take some time to complete'
                         })
 
-                        axios.post('/scan', null, {
+                        apiPost<Instance>('/scan', {
                             params: {
                                 url: filter
                             }
                         })
-                            .then((instance: AxiosResponse<Instance>) => {
+                            .then((instance) => {
                                 const resultingInstances: InstancesResponse = {
                                     ...instances,
-                                    instances: [...instances?.instances!, instance.data]
+                                    instances: [...instances?.instances!, instance]
                                 }
                                 setInstances(resultingInstances)
-                                setInstance(instance.data)
+                                setInstance(instance)
                                 setDialogOpen(true)
 
                             })
-                            .catch((e: AxiosError<InstanceResponseError>) => {
+                            .catch((e: ApiError<InstanceResponseError>) => {
                                 toast({
                                     className: 'bg-red-500',
                                     title: 'Error requesting scan',
-                                    description: e.response?.data.error,
+                                    description: e.data?.error ?? 'Unknown error',
                                 })
                             })
                     }}><PlusIcon/>Start scan</Button>
