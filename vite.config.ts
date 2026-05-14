@@ -3,6 +3,28 @@ import react from '@vitejs/plugin-react-swc'
 import path from "path"
 import svgr from "vite-plugin-svgr";
 import sitemap from 'vite-plugin-sitemap';
+import fs from "node:fs/promises";
+
+const DIST_DIR = path.resolve("dist");
+const STATIC_ROUTES = ['/', '/statistics', '/instances'];
+
+function routeToDir(route: string) {
+    if (route === "/") return DIST_DIR;
+    return path.join(DIST_DIR, route.replace(/^\//, ""));
+}
+
+async function writeStaticRouteFile(route: string) {
+    if (route === "/") return;
+
+    const baseHtmlPath = path.join(DIST_DIR, "index.html");
+    const dir = routeToDir(route);
+    const linkPath = path.join(dir, "index.html");
+    const relativeTarget = path.relative(dir, baseHtmlPath);
+
+    await fs.mkdir(dir, { recursive: true });
+
+    await fs.symlink(relativeTarget, linkPath, "file");
+}
 
 const fetchInstanceRoutes = async (apiUrl: string) => {
     try {
@@ -24,6 +46,7 @@ const fetchInstanceRoutes = async (apiUrl: string) => {
 export default defineConfig(async ({mode}) => {
     const env = loadEnv(mode, process.cwd(), "");
     const instanceRoutes = await fetchInstanceRoutes(env.VITE_APP_API_URL);
+    const dynamicRoutes = [...STATIC_ROUTES, ...instanceRoutes];
 
     return {
         plugins: [
@@ -31,14 +54,15 @@ export default defineConfig(async ({mode}) => {
             react(),
             sitemap({
                 hostname: 'https://scanner.etherpad.org',
-                dynamicRoutes: [
-                    '/',
-                    '/statistics',
-                    '/instances',
-                    ...instanceRoutes,
-                ],
+                dynamicRoutes,
                 exclude: ['/404', '/'],
             }),
+            {
+                name: "create-route-symlinks",
+                closeBundle: async () => {
+                    await Promise.all(dynamicRoutes.map((route) => writeStaticRouteFile(route)));
+                },
+            },
         ],
         base: '/',
         resolve: {
