@@ -14,6 +14,17 @@ export const InstanceDetail = () => {
     const [error, setError] = useState<string>();
 
     useEffect(() => {
+        const previousTitle = document.title;
+        if (instance) {
+            document.title = `${instance.name.replace(/^https?:\/\//i, "")} - Etherpad Scanner`;
+        }
+
+        return () => {
+            document.title = previousTitle;
+        };
+    }, [instance]);
+
+    useEffect(() => {
         const fetchInstance = async () => {
             try {
                 // Fetch all instances and find the one matching the name parameter
