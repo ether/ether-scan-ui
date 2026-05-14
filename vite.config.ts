@@ -60,7 +60,7 @@ export default defineConfig(async ({mode}) => {
             {
                 name: "create-route-symlinks",
                 closeBundle: async () => {
-                    await Promise.all(dynamicRoutes.map((route) => writeStaticRouteFile(route)));
+                    await Promise.all(dynamicRoutes.map((route) => writeStaticRouteFile(route.replaceAll("%2E", "."))));
                 },
             },
         ],
