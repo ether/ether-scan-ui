@@ -72,7 +72,7 @@ export const Instances = () => {
 
     const isOldVersion = (version: string) => {
         const replacedVersion = version.replaceAll(".", "")
-        return replacedVersion < "200"
+        return replacedVersion < "240"
     }
 
     const renderPluginInfo = (plugin: PluginData) => {
