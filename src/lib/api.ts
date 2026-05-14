@@ -19,35 +19,8 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL
 
-const isAbsoluteUrl = /^https?:\/\//i.test(API_BASE_URL)
-
-const joinPaths = (basePath: string, path: string) => {
-    const normalizedBase = basePath.endsWith("/") ? basePath.slice(0, -1) : basePath
-    const normalizedPath = path.startsWith("/") ? path : `/${path}`
-
-    if (!normalizedBase) {
-        return normalizedPath
-    }
-
-    return `${normalizedBase}${normalizedPath}`
-}
-
 const buildUrl = (path: string, params?: QueryParams) => {
-    if (isAbsoluteUrl) {
-        const url = new URL(path, API_BASE_URL)
-
-        if (params) {
-            Object.entries(params).forEach(([key, value]) => {
-                if (value !== null && value !== undefined) {
-                    url.searchParams.set(key, String(value))
-                }
-            })
-        }
-
-        return url.toString()
-    }
-
-    const url = joinPaths(API_BASE_URL, path)
+    const url = `${API_BASE_URL}${path}`
     const searchParams = new URLSearchParams()
 
     if (params) {
