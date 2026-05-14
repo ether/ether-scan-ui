@@ -22,7 +22,7 @@ type ScanResult = {
 
 export type PluginData = {
     name: string,
-    version: string,
+    version: string | null,
     latest_version: string | null,
     update_available: boolean,
 }
