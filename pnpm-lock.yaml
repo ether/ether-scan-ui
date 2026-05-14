@@ -105,6 +105,9 @@ importers:
       vite:
         specifier: ^8.0.0
         version: 8.0.12(@types/node@24.12.4)(jiti@2.7.0)
+      vite-plugin-sitemap:
+        specifier: ^0.8.2
+        version: 0.8.2
       vite-plugin-svgr:
         specifier: ^5.0.0
         version: 5.2.0(typescript@6.0.3)(vite@8.0.12(@types/node@24.12.4)(jiti@2.7.0))
@@ -1734,6 +1737,9 @@ packages:
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0.0 || ^19.0.0-rc
 
+  vite-plugin-sitemap@0.8.2:
+    resolution: {integrity: sha512-bqIw6NVOXg6je81lzX8Lm0vjf8/QSAp8di8fYQzZ3ZdVicOm8+6idBGALJiy1R1FiXNIK8rgORO6HBqXyHW+iQ==}
+
   vite-plugin-svgr@5.2.0:
     resolution: {integrity: sha512-qj2eAKF8C6PZWemVTvQA0xgQIcP1hHU6Buh7fl6BhvayWwnuxE+z417miKxeDvRWbDrupQ1oK99hfxElopJ3sQ==}
     peerDependencies:
@@ -3307,6 +3313,8 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
+
+  vite-plugin-sitemap@0.8.2: {}
 
   vite-plugin-svgr@5.2.0(typescript@6.0.3)(vite@8.0.12(@types/node@24.12.4)(jiti@2.7.0)):
     dependencies:

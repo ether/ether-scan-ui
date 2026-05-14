@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Etherpad Scanner</title>
+    <script>
+      // GitHub Pages SPA workaround
+      // Saves the full path to sessionStorage and redirects to the base URL.
+      // The index.html script then restores the path via history.replaceState.
+      var base = '/';
+      var path = window.location.pathname.replace(base, '') || '/';
+      var search = window.location.search;
+      var hash = window.location.hash;
+      sessionStorage.setItem('gh-pages-redirect', path + search + hash);
+      window.location.replace(base);
+    </script>
+  </head>
+  <body></body>
+</html>
+
