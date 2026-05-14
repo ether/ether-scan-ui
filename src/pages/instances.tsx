@@ -1,6 +1,7 @@
 import {useEffect, useMemo, useState} from "react";
-import {Instance, InstancesResponse, PluginData} from "@/types/InstancesResponse.ts";
-import {AlertTriangle, Check, Lock, NotepadText, PlusIcon} from 'lucide-react'
+import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
+import {AlertTriangle, Check, ExternalLink, Lock, NotepadText, PlusIcon} from 'lucide-react'
+import {Link} from "react-router";
 
 import {
     Dialog,
@@ -10,7 +11,6 @@ import {
     DialogPortal,
     DialogTitle
 } from "@/components/ui/dialog.tsx";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {Input} from "@/components/ui/input"
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area"
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
@@ -24,6 +24,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {isOldVersion} from "@/lib/instance-utils.tsx";
+import {InstanceDetails} from "@/components/instances/instance-details.tsx";
 
 
 export const Instances = () => {
@@ -70,28 +72,7 @@ export const Instances = () => {
         void fetchInstances()
     }, [])
 
-    const isOldVersion = (version: string) => {
-        const replacedVersion = version.replaceAll(".", "")
-        return replacedVersion < "240"
-    }
-
-    const renderPluginInfo = (plugin: PluginData) => {
-        if (plugin.version === null) {
-            return <>{plugin.name}</>
-        }
-
-        if (plugin.update_available) {
-            return <span className="text-red-700">
-                {plugin.name} (Update available: {plugin.version} {'=>'} {plugin.latest_version})
-            </span>
-        }
-
-        return <>{plugin.name} ({plugin.version})</>
-    }
-
     if (!filteredInstances) return <LoadingSpinner/>
-
-    const dbFailures = (instance?.scan.db_reads_failed || 0) + (instance?.scan.db_writes_failed || 0)
 
     return (
         <div className="flex flex-col h-screen"><h1 className="text-4xl font-bold mb-5">Scanned instances</h1>
@@ -207,66 +188,22 @@ export const Instances = () => {
                 <DialogPortal>
                     <DialogContent style={{maxHeight: "100%", overflowY: "auto"}}>
                         <DialogHeader>
-                            <DialogTitle>Scan result from
-                                the {new Date(instance?.scan.scan_time!).toLocaleString()}</DialogTitle>
+                            <DialogTitle className="flex items-center gap-2">
+                                <span>Scanned on: {new Date(instance?.scan.scan_time!).toLocaleString()}</span>
+                                {instance && (
+                                    <Link
+                                        to={`/instances/${encodeURIComponent(instance.name.replace(/^https?:\/\//i, ""))}`}
+                                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                                        title="Open dedicated instance page"
+                                        aria-label="Open dedicated instance page"
+                                    >
+                                        <ExternalLink className="h-4 w-4"/>
+                                    </Link>
+                                )}
+                            </DialogTitle>
                             <DialogDescription>Instance {instance?.name}</DialogDescription>
                         </DialogHeader>
-                        {instance && <div className="flex flex-col gap-5">
-                            <div className="grid grid-cols-2 gap-5">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>Version</CardTitle>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p>{instance?.scan.version}</p>
-                                    </CardContent>
-                                </Card>
-
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle>API level</CardTitle>
-                                        <CardContent>
-                                            <p>{instance?.scan.api_version}</p>
-                                        </CardContent>
-                                    </CardHeader>
-                                </Card>
-                                <div className="col-span-2">
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Health</CardTitle>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <ul className="list-disc ml-5">
-                                                { instance?.scan.websocket_available !== null && <li>Websocket supported: {instance?.scan.websocket_available ? <span>Yes</span> : <span className="text-red-700">No</span>}</li> }
-                                                <li>DB failures: {dbFailures}</li>
-                                            </ul>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                                <div className="col-span-2">
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>Plugins</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="">
-                                            <ul className="list-disc ml-5">{instance?.scan.plugin_data.map(p =>
-                                                <li key={p.name}>{renderPluginInfo(p)}</li>)}
-                                            </ul>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            </div>
-                            {isOldVersion(instance?.scan.version!) &&
-                                <span className="flex gap-5">
-                                    <AlertTriangle className="text-yellow-400 w-16 h-16"/>
-                                    <span className="text-red-700 font-bold mt-2">Your Etherpad version is really outdated. Consider upgrading to a newer version.</span>
-                                </span>}
-                            {instance.scan.is_public === false && <span className="flex gap-5">
-                                <Lock className="text-red-700 w-16 h-16"/>
-                                <span className="font-bold mt-2">Your Etherpad instance is not public. This means it can only be accessed by authenticated users.</span>
-                            </span>}
-                            <span>First seen: {new Date(instance.first_seen).toLocaleDateString()}</span>
-                        </div>}
+                        {instance && <InstanceDetails instance={instance}/>}
                     </DialogContent>
                 </DialogPortal>
             </Dialog>
