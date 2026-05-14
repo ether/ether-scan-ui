@@ -15,7 +15,7 @@ export default function Header() {
                         <Logo className="w-36"/>
                     </Link>
                 </div>
-                <div className={cn("block lg:!hidden")}>
+                <div className={cn("block lg:hidden!")}>
                     <MobileSidebar/>
                 </div>
 
