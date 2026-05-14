@@ -6,6 +6,5 @@
     "abandonments:recommended",
     "security:minimumReleaseAgeNpm",
     ":maintainLockFilesWeekly"
-  ],
-  "packageManager": "pnpm"
+  ]
 }
