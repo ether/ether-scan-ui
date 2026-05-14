@@ -1,12 +1,12 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {FC, useEffect, useMemo, useState} from "react";
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
-import axios, {AxiosResponse} from "axios";
 import {HistoryResponse, HistoryVersionCountPerMonth} from "@/types/HistoryResponse.ts";
 import {Line} from "react-chartjs-2";
 import {ChartData} from "chart.js";
 // @ts-ignore
 import {ChartDataset} from "chart.js/dist/types";
+import {apiGet} from "@/lib/api.ts";
 
 export const InstancesByVersion: FC = () => {
     const [historyData, setHistoryData] = useState<HistoryResponse>()
@@ -92,9 +92,9 @@ export const InstancesByVersion: FC = () => {
 
 
     useEffect(() => {
-        axios.get('/history')
-            .then((historyData: AxiosResponse<HistoryResponse>) => {
-                setHistoryData(historyData.data)
+        apiGet<HistoryResponse>('/history')
+            .then((historyData) => {
+                setHistoryData(historyData)
             })
     }, []);
 

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import axios, {AxiosResponse} from "axios";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
 import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
+import {apiGet} from "@/lib/api.ts";
 
 export const Home = ()=>{
     const [instances, setInstances] = useState<Instance[]>()
@@ -11,10 +11,10 @@ export const Home = ()=>{
     }
 
     useEffect(() => {
-        axios.get("/instances")
-            .then((res: AxiosResponse<InstancesResponse>) => {
+        apiGet<InstancesResponse>("/instances")
+            .then((res) => {
                 const topInstances : Instance[] = []
-                res.data.instances.forEach((instance) => {
+                res.instances.forEach((instance) => {
                     if (instance.scan.is_public && instance.scan.websocket_available && !hasFailures(instance) && instance.name.startsWith('https://') && instance.scan.version.replaceAll(".", "") > "22") {
                         topInstances.push(instance)
                     }
