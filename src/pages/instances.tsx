@@ -205,7 +205,7 @@ export const Instances = () => {
             </ScrollArea>
             <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(!dialogOpen)}>
                 <DialogPortal>
-                    <DialogContent>
+                    <DialogContent style={{maxHeight: "100%", overflowY: "auto"}}>
                         <DialogHeader>
                             <DialogTitle>Scan result from
                                 the {new Date(instance?.scan.scan_time!).toLocaleString()}</DialogTitle>
