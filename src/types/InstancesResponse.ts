@@ -4,6 +4,7 @@ export type InstancesResponse = {
 
 export type Instance = {
     name: string,
+    first_seen: string,
     scan: ScanResult
 }
 
