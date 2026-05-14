@@ -51,7 +51,7 @@ export const InstanceDetail = () => {
 
     if (error) {
         return (
-            <div className="flex flex-col h-screen p-5">
+            <div className="flex flex-col h-full overflow-y-auto p-5">
                 <h1 className="text-4xl font-bold mb-5">Instance Details</h1>
                 <Card>
                     <CardContent className="pt-6">
@@ -64,7 +64,7 @@ export const InstanceDetail = () => {
 
     if (!instance) {
         return (
-            <div className="flex flex-col h-screen p-5">
+            <div className="flex flex-col h-full overflow-y-auto p-5">
                 <h1 className="text-4xl font-bold mb-5">Instance Details</h1>
                 <Card>
                     <CardContent className="pt-6">
@@ -76,7 +76,7 @@ export const InstanceDetail = () => {
     }
 
     return (
-        <div className="flex flex-col h-screen p-5">
+        <div className="flex flex-col h-full overflow-y-auto p-5">
             <h1 className="text-4xl font-bold mb-5">Instance Details</h1>
             <h2 className="text-2xl mb-5">{instance.name}</h2>
             <p className="mb-5">
