@@ -265,6 +265,7 @@ export const Instances = () => {
                                 <Lock className="text-red-700 w-16 h-16"/>
                                 <span className="font-bold mt-2">Your Etherpad instance is not public. This means it can only be accessed by authenticated users.</span>
                             </span>}
+                            <span>First seen: {new Date(instance.first_seen).toLocaleDateString()}</span>
                         </div>}
                     </DialogContent>
                 </DialogPortal>
