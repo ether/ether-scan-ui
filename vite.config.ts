@@ -9,9 +9,11 @@ const fetchInstanceRoutes = async (apiUrl: string) => {
         const response = await fetch(`${apiUrl}/instances`);
         if (!response.ok) throw new Error(`API returned ${response.status}`);
         const data = await response.json();
-        return data.instances.map((instance: { name: string }) =>
-            `/instances/${encodeURIComponent(instance.name.replace(/^https?:\/\//i, ""))}`
-        );
+        return data.instances.map((instance: { name: string }) => {
+            const normalized = instance.name.replace(/^https?:\/\//i, "");
+            const encoded = encodeURIComponent(normalized).replace(/\./g, "%2E");
+            return `/instances/${encoded}`;
+        });
     } catch (error) {
         console.warn(`⚠️  Failed to fetch instances for sitemap: ${error instanceof Error ? error.message : 'Unknown error'}`);
         return [];
