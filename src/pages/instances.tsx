@@ -60,7 +60,11 @@ export const Instances = () => {
                 response.instances.forEach((instance) => {
                     filterableVersions.add(instance.scan.version.substring(0, instance.scan.version.lastIndexOf(".")))
                 })
-                setFilterableVersions(Array.from(filterableVersions))
+                setFilterableVersions(
+                    Array.from(filterableVersions).sort((a: string, b: string) =>
+                        b.localeCompare(a, undefined, { numeric: true, sensitivity: "base" }),
+                    ),
+                )
         }
 
         void fetchInstances()
