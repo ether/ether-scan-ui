@@ -6,7 +6,7 @@ import sitemap from 'vite-plugin-sitemap';
 import fs from "node:fs/promises";
 
 const DIST_DIR = path.resolve("dist");
-const STATIC_ROUTES = ['/', '/statistics/', '/instances/'];
+const STATIC_ROUTES = ['/', '/statistics', '/instances'];
 
 function routeToDir(route: string) {
     if (route === "/") return DIST_DIR;
@@ -26,6 +26,24 @@ async function writeStaticRouteFile(route: string) {
     await fs.symlink(relativeTarget, linkPath, "file");
 }
 
+async function addTrailingSlashToSitemapLocs() {
+    const sitemapPath = path.join(DIST_DIR, "sitemap.xml");
+
+    try {
+        const sitemap = await fs.readFile(sitemapPath, "utf-8");
+        const updated = sitemap.replace(/<loc>([^<]+)<\/loc>/g, (_match, loc: string) => {
+            const normalizedLoc = loc.endsWith("/") ? loc : `${loc}/`;
+            return `<loc>${normalizedLoc}</loc>`;
+        });
+
+        if (updated !== sitemap) {
+            await fs.writeFile(sitemapPath, updated, "utf-8");
+        }
+    } catch (error) {
+        console.warn(`⚠️  Failed to post-process sitemap.xml: ${error instanceof Error ? error.message : "Unknown error"}`);
+    }
+}
+
 const fetchInstanceRoutes = async (apiUrl: string) => {
     try {
         const response = await fetch(`${apiUrl}/instances`);
@@ -34,7 +52,7 @@ const fetchInstanceRoutes = async (apiUrl: string) => {
         return data.instances.map((instance: { name: string }) => {
             const normalized = instance.name.replace(/^https?:\/\//i, "");
             const encoded = encodeURIComponent(normalized).replace(/\./g, "%2E");
-            return `/instances/${encoded}/`;
+            return `/instances/${encoded}`;
         });
     } catch (error) {
         console.warn(`⚠️  Failed to fetch instances for sitemap: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -61,6 +79,12 @@ export default defineConfig(async ({mode}) => {
                 name: "create-route-symlinks",
                 closeBundle: async () => {
                     await Promise.all(dynamicRoutes.map((route) => writeStaticRouteFile(route.replaceAll("%2E", "."))));
+                },
+            },
+            {
+                name: "add-slash-location-end",
+                closeBundle: async () => {
+                    await addTrailingSlashToSitemapLocs();
                 },
             },
         ],
