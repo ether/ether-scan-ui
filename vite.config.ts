@@ -6,7 +6,7 @@ import sitemap from 'vite-plugin-sitemap';
 import fs from "node:fs/promises";
 
 const DIST_DIR = path.resolve("dist");
-const STATIC_ROUTES = ['/', '/statistics', '/instances'];
+const STATIC_ROUTES = ['/', '/statistics/', '/instances/'];
 
 function routeToDir(route: string) {
     if (route === "/") return DIST_DIR;
@@ -34,7 +34,7 @@ const fetchInstanceRoutes = async (apiUrl: string) => {
         return data.instances.map((instance: { name: string }) => {
             const normalized = instance.name.replace(/^https?:\/\//i, "");
             const encoded = encodeURIComponent(normalized).replace(/\./g, "%2E");
-            return `/instances/${encoded}`;
+            return `/instances/${encoded}/`;
         });
     } catch (error) {
         console.warn(`⚠️  Failed to fetch instances for sitemap: ${error instanceof Error ? error.message : 'Unknown error'}`);
