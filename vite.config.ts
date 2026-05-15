@@ -74,6 +74,16 @@ export default defineConfig(async ({mode}) => {
                 hostname: 'https://scanner.etherpad.org',
                 dynamicRoutes,
                 exclude: ['/404', '/'],
+                priority: {
+                    '*': 0.8,
+                    '/instances': 1.0,
+                    '/statistics': 1.0,
+                },
+                changefreq: {
+                    '*': 'weekly',
+                    '/instances': 'daily',
+                    '/statistics': 'daily',
+                }
             }),
             {
                 name: "create-route-symlinks",
