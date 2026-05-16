@@ -26,4 +26,6 @@ export type PluginData = {
     version: string | null,
     latest_version: string | null,
     update_available: boolean,
+    old: boolean | null,
+    deleted: boolean | null,
 }

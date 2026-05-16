@@ -11,6 +11,18 @@ export const getDbFailures = (instance: Instance) => {
 };
 
 export const renderPluginInfo = (plugin: PluginData): ReactNode => {
+    if (plugin.deleted) {
+        return <span className="text-red-700">{plugin.name} was deleted</span>
+    }
+
+    if (plugin.old) {
+        return <span className="text-red-700">{plugin.name} is deprecated</span>
+    }
+
+    if (plugin.old === null) {
+        return <span className="text-yellow-700">{plugin.name} is unknown</span>
+    }
+
     if (plugin.version === null) {
         return plugin.name;
     }
