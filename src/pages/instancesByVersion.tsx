@@ -70,7 +70,7 @@ export const InstancesByVersion: FC = () => {
             }
         })
 
-        function getColorForVersion(versionString) {
+        function getColorForVersion(versionString: string) {
             // extract major and minor version
             const [major, minor] = versionString.split('.').map(Number);
 
@@ -92,7 +92,8 @@ export const InstancesByVersion: FC = () => {
         let tmpDataset: null|ChartDataset = null
 
         allDatasets.slice(0, -showVersions).forEach((dataset: ChartDataset) => {
-            const label = dataset.label?.substring(0, 1) + '.x'
+            const [major] = dataset.label.split('.').map(Number);
+            const label = major + '.x'
             if (tmpDataset === null || tmpDataset.label !== label) {
                 if (tmpDataset !== null) {
                     datasets.push(tmpDataset)
@@ -104,16 +105,19 @@ export const InstancesByVersion: FC = () => {
                 return
             }
             if (tmpDataset.label === label) {
-                dataset.data.forEach((element, index) => {
+                dataset.data.forEach((element: ChartDataset, index: number) => {
                     tmpDataset.data[index] = tmpDataset.data[index] + element
                 })
             }
         })
 
-        datasets.push(tmpDataset)
+        if (tmpDataset !== null) {
+            datasets.push(tmpDataset)
+        }
+
         datasets.push(...allDatasets.slice(-showVersions))
 
-        datasets.forEach((dataset) => {
+        datasets.forEach((dataset: ChartDataset) => {
             const color = getColorForVersion(dataset.label)
 
             dataset.borderColor = color;
