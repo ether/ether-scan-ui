@@ -14,7 +14,7 @@ export const InstancesByVersion: FC = () => {
         if (!historyData || !historyData.history) return {}
         const map = new Map<string, HistoryVersionCountPerMonth[]>
         const labels = new Array<string>
-
+        const showVersions = 8
 
         historyData.history.map((year) => {
             year.months.forEach((month) => {
@@ -52,7 +52,7 @@ export const InstancesByVersion: FC = () => {
         })
 
         // Limit to last 10 versions
-        let datasets = Array.from(map).map(([_, value]) => {
+        const allDatasets: ChartDataset[]  = Array.from(map).map(([_, value]) => {
             return {
                 label: value[0].version,
                 data: value.map(v => v.count),
@@ -68,18 +68,73 @@ export const InstancesByVersion: FC = () => {
                 if (aVersion[i] > bVersion[i]) return 1
                 if (i === aVersion.length - 1) return 0
             }
-        }).slice(-10)
+        })
+
+        function getColorForVersion(versionString) {
+            // extract major and minor version
+            const [major, minor] = versionString.split('.').map(Number);
+
+            let hue = 0; // default: red
+            if (major === 2) hue = 220; // blue
+            if (major === 3) hue = 100; // green
+            if (major === 4) hue = 280; // purple
+            if (major > 4) hue = (major * 60) % 360; // fallback
+
+            // lightness
+            const baseLightness = 40;
+            const minorStep = 5;
+            const lightness = Math.min(baseLightness + ((minor || 0) * minorStep), 80);
+
+            return `hsl(${hue}, 85%, ${lightness}%)`;
+        }
+
+        let datasets: ChartDataset[] = []
+        let tmpDataset: null|ChartDataset = null
+
+        allDatasets.slice(0, -showVersions).forEach((dataset: ChartDataset) => {
+            const label = dataset.label?.substring(0, 1) + '.x'
+            if (tmpDataset === null || tmpDataset.label !== label) {
+                if (tmpDataset !== null) {
+                    datasets.push(tmpDataset)
+                }
+                tmpDataset = dataset
+
+                tmpDataset.label = label
+                tmpDataset.hidden = true
+                return
+            }
+            if (tmpDataset.label === label) {
+                dataset.data.forEach((element, index) => {
+                    tmpDataset.data[index] = tmpDataset.data[index] + element
+                })
+            }
+        })
+
+        datasets.push(tmpDataset)
+        datasets.push(...allDatasets.slice(-showVersions))
+
+        datasets.forEach((dataset) => {
+            const color = getColorForVersion(dataset.label)
+
+            dataset.borderColor = color;
+            dataset.backgroundColor = color;
+        })
+
+        // Set added instances for first month to zero
+        dataAdded[0] = 0
 
         datasets.push({
             type: 'bar' as const,
             label: "Instances added",
             data: dataAdded,
+            backgroundColor: 'rgba(50, 200, 52, 0.3)',
         })
 
         datasets.push({
             type: 'bar' as const,
             label: "Instances removed",
             data: dataRemoved,
+            backgroundColor: 'rgba(173, 65, 50, 0.3)',
         })
 
         return {
@@ -102,21 +157,24 @@ export const InstancesByVersion: FC = () => {
 
     return <Card>
         <CardHeader>
-            <CardTitle className="font-bold text-xl">Etherpad version count</CardTitle>
+            <CardTitle className="font-bold text-xl">Etherpad versions</CardTitle>
         </CardHeader>
         <CardContent>
-            <Line
-                options={{
-                    scales: {
-                        x: {
-                            stacked: true,
-                        }
-                    }
-                }}
-                data={{
-                    labels: data.labels,
-                    datasets: data.datasets
-                }}/>
+            <div style={{position: 'relative', height: "80vh", width: '100%'}}>
+                <Line
+                    options={{
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                            }
+                        },
+                    }}
+                    data={{
+                        labels: data.labels,
+                        datasets: data.datasets
+                    }}/>
+            </div>
         </CardContent>
     </Card>
 }
