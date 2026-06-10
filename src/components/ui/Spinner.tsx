@@ -1,8 +1,8 @@
-import {SVGProps} from "react";
+import {ImgHTMLAttributes} from "react";
 import {createPortal} from "react-dom";
 import {Card} from "@/components/ui/card.tsx";
 
-export interface ISVGProps extends SVGProps<SVGSVGElement> {
+export interface ISpinnerProps extends ImgHTMLAttributes<HTMLImageElement> {
     size?: number;
     className?: string;
 }
@@ -11,7 +11,7 @@ export const LoadingSpinner = ({
                                    size = 128,
                                    className,
                                    ...props
-                               }: ISVGProps) => {
+                               }: ISpinnerProps) => {
     return createPortal(
         <div className="flex pl-5 pr-5 pt-2 pb-2 rounded" id="loading-inner">
             <Card className="border-border bg-accent">
