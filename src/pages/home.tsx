@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
 import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
 import {apiGet} from "@/lib/api.ts";
+import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
 
 export const Home = ()=>{
     const [instances, setInstances] = useState<Instance[]>()
@@ -59,7 +60,9 @@ export const Home = ()=>{
                             )
                         })}
                         </>
-                     : <tr><td colSpan={2} className="text-center">Loading...</td></tr>}
+                     : <tr>
+                            <td colSpan={2} className="text-center"><LoadingSpinner/></td>
+                    </tr>}
                     </tbody>
                 </table>
             </div>
