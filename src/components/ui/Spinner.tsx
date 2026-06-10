@@ -8,7 +8,6 @@ export interface ISpinnerProps extends ImgHTMLAttributes<HTMLImageElement> {
 
 export const LoadingSpinner = ({
                                    size = 128,
-                                   className,
                                    ...props
                                }: ISpinnerProps) => {
     return createPortal(
