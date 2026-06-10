@@ -4,7 +4,6 @@ import {Card} from "@/components/ui/card.tsx";
 
 export interface ISpinnerProps extends ImgHTMLAttributes<HTMLImageElement> {
     size?: number;
-    className?: string;
 }
 
 export const LoadingSpinner = ({
