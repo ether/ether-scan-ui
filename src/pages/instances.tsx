@@ -24,7 +24,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {isOldVersion} from "@/lib/instance-utils.tsx";
+import {getName, isOldVersion} from "@/lib/instance-utils.tsx";
 import {InstanceDetails} from "@/components/instances/instance-details.tsx";
 
 
@@ -131,11 +131,8 @@ export const Instances = () => {
                                     </div>
                                 </td>
                                 <td className="border px-4 py-2 cursor-pointer" onClick={() => {
-                                    if (!instance.name.startsWith("http")) {
-                                        instance.name = "http://" + instance.name;
-                                    }
                                     window.open(instance.name);
-                                }}>{instance.name}</td>
+                                }}>{getName(instance)}</td>
                                 <td className="border px-4 py-2 text-etherpad" onClick={() => {
                                     setInstance(instance);
                                     setDialogOpen(true);
@@ -201,7 +198,7 @@ export const Instances = () => {
                                     </Link>
                                 )}
                             </DialogTitle>
-                            <DialogDescription>Instance {instance?.name}</DialogDescription>
+                            <DialogDescription>Instance: {instance && getName(instance)}</DialogDescription>
                         </DialogHeader>
                         {instance && <InstanceDetails instance={instance}/>}
                     </DialogContent>

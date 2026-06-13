@@ -16,7 +16,7 @@ export const Home = ()=>{
             .then((res) => {
                 const topInstances : Instance[] = []
                 res.instances.forEach((instance) => {
-                    if (instance.scan.is_public && instance.scan.websocket_available && !hasFailures(instance) && instance.name.startsWith('https://') && instance.scan.version.replaceAll(".", "") > "22") {
+                    if (instance.scan.is_public && instance.scan.websocket_available && !hasFailures(instance) && instance.name.startsWith('https://') && instance.scan.version.replaceAll(".", "") > "27") {
                         topInstances.push(instance)
                     }
                 })
@@ -33,15 +33,25 @@ export const Home = ()=>{
 
     return (
         <ScrollArea className="flex flex-col m-5 h-[99%]">
-            <h1 className="text-4xl font-bold mb-5">Welcome to Etherpad scanner</h1>
-            <p>The etherpad scanner scans the internet for running etherpad instances to get an overview of the etherpad eco system (based on the github project <a href="https://github.com/gared/ether-scan">ether-scan</a>.</p>
-            <p>This tool also allows you to get instant insights into your Etherpad instance. It is designed to quickly assess the configuration, health and security of your Etherpad setup.</p>
-            <br/>
-            <p>If you are looking for a public instance which you can quickly use you can find here a list of some public instances:</p>
+            <h1 className="text-4xl font-bold mb-5">Welcome to Etherpad Scanner</h1>
+            <p className="mb-3">
+                <strong>Etherpad Scanner</strong> continuously crawls the internet for publicly reachable{" "}
+                <a href="https://etherpad.org" className="underline hover:opacity-80" target="_blank" rel="noreferrer">Etherpad</a>{" "}
+                instances, giving you a comprehensive overview of the global Etherpad ecosystem. It is powered by the open-source backend project{" "}
+                <a href="https://github.com/gared/ether-scan" className="underline hover:opacity-80" target="_blank" rel="noreferrer">ether-scan</a>.
+            </p>
+            <p className="mb-3">
+                Beyond discovery, this tool lets you instantly analyse <em>any</em> Etherpad instance — including your own. Enter a URL on the{" "}
+                <strong>Scan</strong> page to quickly evaluate its configuration, plugin landscape, version status, and potential security concerns.
+            </p>
+            <p className="mb-2 font-medium">
+                Looking for a public Etherpad instance to use right now? Here are some of the best-performing ones:
+            </p>
             <div className="grid grid-cols-1 gap-5">
                 <table className="w-full">
                     <thead>
                     <tr>
+                        <th className="px-4 py-2">Name</th>
                         <th className="px-4 py-2">URL</th>
                         <th className="px-4 py-2">Plugins</th>
                     </tr>
@@ -52,9 +62,10 @@ export const Home = ()=>{
                         {instances.map((instance) => {
                             return (
                                 <tr key={instance.name}>
+                                    <td className="border px-4 py-2">{instance.scan.title}</td>
                                     <td className="border px-4 py-2 cursor-pointer" onClick={() => {
                                         window.open(instance.name);
-                                    }}>{instance.name}</td>
+                                    }}>{instance.name.replace(/^https?:\/\//i, "")}</td>
                                     <td className="border px-4 py-2">{instance.scan.plugins.join(', ')}</td>
                                 </tr>
                             )

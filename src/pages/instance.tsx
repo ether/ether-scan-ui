@@ -4,7 +4,7 @@ import { Instance, InstancesResponse } from "@/types/InstancesResponse.ts";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { LoadingSpinner } from "@/components/ui/Spinner.tsx";
 import { apiGet } from "@/lib/api.ts";
-import { findInstanceByName } from "@/lib/instance-utils.tsx";
+import {findInstanceByName, getName} from "@/lib/instance-utils.tsx";
 import { InstanceDetails } from "@/components/instances/instance-details.tsx";
 
 export const InstanceDetail = () => {
@@ -16,7 +16,7 @@ export const InstanceDetail = () => {
     useEffect(() => {
         const previousTitle = document.title;
         if (instance) {
-            document.title = `${instance.name.replace(/^https?:\/\//i, "")} - Etherpad Scanner`;
+            document.title = `${getName(instance)} - Etherpad Scanner`;
         }
 
         return () => {
@@ -78,7 +78,7 @@ export const InstanceDetail = () => {
     return (
         <div className="flex flex-col h-full overflow-y-auto p-5">
             <h1 className="text-4xl font-bold mb-5">Instance Details</h1>
-            <h2 className="text-2xl mb-5">{instance.name}</h2>
+            <h2 className="text-2xl mb-5">{getName(instance)}</h2>
             <p className="mb-5">
                 Scanned on: {new Date(instance.scan.scan_time).toLocaleString()}
             </p>

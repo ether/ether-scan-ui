@@ -6,6 +6,17 @@ export const isOldVersion = (version: string) => {
     return replacedVersion < "240";
 };
 
+export const getName = (instance: Instance): string => {
+    const domain = instance.name.replace(/^https?:\/\//i, "")
+
+    if (instance.scan.title) {
+        return instance.scan.title + ' [' + domain + ']';
+    }
+
+    return domain;
+};
+
+
 export const getDbFailures = (instance: Instance) => {
     return (instance.scan.db_reads_failed || 0) + (instance.scan.db_writes_failed || 0);
 };
