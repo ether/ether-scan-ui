@@ -3,6 +3,8 @@ import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
 import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
 import {apiGet} from "@/lib/api.ts";
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 export const Home = ()=>{
     const [instances, setInstances] = useState<Instance[]>()
@@ -16,7 +18,7 @@ export const Home = ()=>{
             .then((res) => {
                 const topInstances : Instance[] = []
                 res.instances.forEach((instance) => {
-                    if (instance.scan.is_public && instance.scan.websocket_available && !hasFailures(instance) && instance.name.startsWith('https://') && instance.scan.version.replaceAll(".", "") > "22") {
+                    if (instance.scan.is_public && instance.scan.websocket_available && !hasFailures(instance) && instance.name.startsWith('https://') && instance.scan.version.replaceAll(".", "") > "27") {
                         topInstances.push(instance)
                     }
                 })
@@ -33,39 +35,76 @@ export const Home = ()=>{
 
     return (
         <ScrollArea className="flex flex-col m-5 h-[99%]">
-            <h1 className="text-4xl font-bold mb-5">Welcome to Etherpad scanner</h1>
-            <p>The etherpad scanner scans the internet for running etherpad instances to get an overview of the etherpad eco system (based on the github project <a href="https://github.com/gared/ether-scan">ether-scan</a>.</p>
-            <p>This tool also allows you to get instant insights into your Etherpad instance. It is designed to quickly assess the configuration, health and security of your Etherpad setup.</p>
-            <br/>
-            <p>If you are looking for a public instance which you can quickly use you can find here a list of some public instances:</p>
-            <div className="grid grid-cols-1 gap-5">
-                <table className="w-full">
-                    <thead>
-                    <tr>
-                        <th className="px-4 py-2">URL</th>
-                        <th className="px-4 py-2">Plugins</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {instances && instances.length > 0 ?
-                        <>
-                        {instances.map((instance) => {
-                            return (
-                                <tr key={instance.name}>
-                                    <td className="border px-4 py-2 cursor-pointer" onClick={() => {
-                                        window.open(instance.name);
-                                    }}>{instance.name}</td>
-                                    <td className="border px-4 py-2">{instance.scan.plugins.join(', ')}</td>
-                                </tr>
-                            )
-                        })}
-                        </>
-                     : <tr>
-                            <td colSpan={2} className="text-center"><LoadingSpinner/></td>
-                    </tr>}
-                    </tbody>
-                </table>
-            </div>
+            <h1 className="text-4xl font-bold mb-5">Welcome to Etherpad Scanner</h1>
+            <p className="mb-3">
+                <strong>Etherpad Scanner</strong> continuously crawls the internet for publicly reachable{" "}
+                <a href="https://etherpad.org" className="underline hover:opacity-80" target="_blank" rel="noreferrer">Etherpad</a>{" "}
+                instances, giving you a comprehensive overview of the global Etherpad ecosystem. It is powered by the open-source backend project{" "}
+                <a href="https://github.com/gared/ether-scan" className="underline hover:opacity-80" target="_blank" rel="noreferrer">ether-scan</a>.
+            </p>
+            <p className="mb-3">
+                Beyond discovery, this tool lets you instantly analyse <em>any</em> Etherpad instance — including your own. Enter a URL on the{" "}
+                <strong>Scan</strong> page to quickly evaluate its configuration, plugin landscape, version status, and potential security concerns.
+            </p>
+            <p className="mb-2 font-medium">
+                Looking for a public Etherpad instance to use right now? Here are some of the best-performing ones:
+            </p>
+            {instances && instances.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+                    {instances.map((instance) => {
+                        const displayUrl = instance.name.replace(/^https?:\/\//i, "").replace(/\/$/, "");
+                        const title = (instance.scan as any).title || displayUrl;
+                        return (
+                            <Card key={instance.name} className="flex flex-col hover:shadow-md transition-shadow">
+                                <CardHeader className="pb-2">
+                                    <div className="flex items-start justify-between gap-2">
+                                        <CardTitle className="text-base leading-tight">{title}</CardTitle>
+                                        <span className="shrink-0 text-xs font-mono bg-muted text-muted-foreground rounded px-1.5 py-0.5">
+                                            v{instance.scan.version}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground truncate">{displayUrl}</p>
+                                </CardHeader>
+                                <CardContent className="flex-1 pb-3">
+                                    {instance.scan.plugins.length > 0 ? (
+                                        <div className="flex flex-wrap gap-1">
+                                            {instance.scan.plugins.slice(0, 8).map((plugin) => (
+                                                <span
+                                                    key={plugin}
+                                                    className="text-xs bg-secondary text-secondary-foreground rounded-full px-2 py-0.5"
+                                                >
+                                                    {plugin}
+                                                </span>
+                                            ))}
+                                            {instance.scan.plugins.length > 8 && (
+                                                <span className="text-xs text-muted-foreground rounded-full px-2 py-0.5 border">
+                                                    +{instance.scan.plugins.length - 8} more
+                                                </span>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className="text-xs text-muted-foreground italic">No plugins installed</p>
+                                    )}
+                                </CardContent>
+                                <CardFooter className="pt-0">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="w-full"
+                                        onClick={() => window.open(instance.name, "_blank")}
+                                    >
+                                        Open Instance ↗
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="flex justify-center py-12">
+                    <LoadingSpinner/>
+                </div>
+            )}
             <ScrollBar orientation="vertical"/>
         </ScrollArea>
     )

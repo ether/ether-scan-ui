@@ -11,6 +11,7 @@ export type Instance = {
 type ScanResult = {
     api_version: string,
     is_public: boolean | null,
+    title: string | null,
     version: string,
     scan_time: string,
     plugins: string[],
