@@ -11,6 +11,7 @@ export type Instance = {
 type ScanResult = {
     api_version: string,
     is_public: boolean | null,
+    title: string | null,
     version: string,
     scan_time: string,
     plugins: string[],
@@ -23,7 +24,6 @@ type ScanResult = {
 
 export type PluginData = {
     name: string,
-    title: string | null,
     version: string | null,
     latest_version: string | null,
     update_available: boolean,
