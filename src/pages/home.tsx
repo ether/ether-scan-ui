@@ -3,6 +3,8 @@ import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
 import {Instance, InstancesResponse} from "@/types/InstancesResponse.ts";
 import {apiGet} from "@/lib/api.ts";
 import {LoadingSpinner} from "@/components/ui/Spinner.tsx";
+import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import {Button} from "@/components/ui/button.tsx";
 
 export const Home = ()=>{
     const [instances, setInstances] = useState<Instance[]>()
@@ -47,36 +49,62 @@ export const Home = ()=>{
             <p className="mb-2 font-medium">
                 Looking for a public Etherpad instance to use right now? Here are some of the best-performing ones:
             </p>
-            <div className="grid grid-cols-1 gap-5">
-                <table className="w-full">
-                    <thead>
-                    <tr>
-                        <th className="px-4 py-2">Name</th>
-                        <th className="px-4 py-2">URL</th>
-                        <th className="px-4 py-2">Plugins</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {instances && instances.length > 0 ?
-                        <>
-                        {instances.map((instance) => {
-                            return (
-                                <tr key={instance.name}>
-                                    <td className="border px-4 py-2">{instance.scan.title}</td>
-                                    <td className="border px-4 py-2 cursor-pointer" onClick={() => {
-                                        window.open(instance.name);
-                                    }}>{instance.name.replace(/^https?:\/\//i, "")}</td>
-                                    <td className="border px-4 py-2">{instance.scan.plugins.join(', ')}</td>
-                                </tr>
-                            )
-                        })}
-                        </>
-                     : <tr>
-                            <td colSpan={2} className="text-center"><LoadingSpinner/></td>
-                    </tr>}
-                    </tbody>
-                </table>
-            </div>
+            {instances && instances.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+                    {instances.map((instance) => {
+                        const displayUrl = instance.name.replace(/^https?:\/\//i, "").replace(/\/$/, "");
+                        const title = (instance.scan as any).title || displayUrl;
+                        return (
+                            <Card key={instance.name} className="flex flex-col hover:shadow-md transition-shadow">
+                                <CardHeader className="pb-2">
+                                    <div className="flex items-start justify-between gap-2">
+                                        <CardTitle className="text-base leading-tight">{title}</CardTitle>
+                                        <span className="shrink-0 text-xs font-mono bg-muted text-muted-foreground rounded px-1.5 py-0.5">
+                                            v{instance.scan.version}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground truncate">{displayUrl}</p>
+                                </CardHeader>
+                                <CardContent className="flex-1 pb-3">
+                                    {instance.scan.plugins.length > 0 ? (
+                                        <div className="flex flex-wrap gap-1">
+                                            {instance.scan.plugins.slice(0, 8).map((plugin) => (
+                                                <span
+                                                    key={plugin}
+                                                    className="text-xs bg-secondary text-secondary-foreground rounded-full px-2 py-0.5"
+                                                >
+                                                    {plugin}
+                                                </span>
+                                            ))}
+                                            {instance.scan.plugins.length > 8 && (
+                                                <span className="text-xs text-muted-foreground rounded-full px-2 py-0.5 border">
+                                                    +{instance.scan.plugins.length - 8} more
+                                                </span>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p className="text-xs text-muted-foreground italic">No plugins installed</p>
+                                    )}
+                                </CardContent>
+                                <CardFooter className="pt-0">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="w-full"
+                                        onClick={() => window.open(instance.name, "_blank")}
+                                    >
+                                        Open Instance ↗
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="flex justify-center py-12">
+                    <LoadingSpinner/>
+                </div>
+            )}
             <ScrollBar orientation="vertical"/>
         </ScrollArea>
     )
