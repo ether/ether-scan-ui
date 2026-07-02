@@ -40,7 +40,7 @@ importers:
         version: 2.1.1
       lucide-react:
         specifier: ^1.0.0
-        version: 1.21.0(react@19.2.7)
+        version: 1.22.0(react@19.2.7)
       react:
         specifier: ^19.2.4
         version: 19.2.7
@@ -1097,12 +1097,22 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
+  baseline-browser-mapping@2.10.40:
+    resolution: {integrity: sha512-BSSLZ9/Cjjv7Gtj5B68ZzXcXUg8iOf3fme+FCuh8rC/Go+Kmh8cox7M3A8dolou16s64QjLPOSdngh7GxXvkSw==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
   brace-expansion@5.0.6:
     resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
     engines: {node: 18 || 20 || >=22}
 
   browserslist@4.28.2:
     resolution: {integrity: sha512-48xSriZYYg+8qXna9kwqjIVzuQxi+KYWp2+5nCYnYKPTr0LvD89Jqk2Or5ogxz0NUMfIjhh2lIUX/LyX9B4oIg==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+
+  browserslist@4.28.4:
+    resolution: {integrity: sha512-MTc8i/x9jBQd1iMw2CFGS+rwMa07eYjLR0CCTLDACl9xhxy+nIs3KeML/biicXtk9JrZ6dnnTatmc7ErPXIxqw==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
@@ -1116,6 +1126,9 @@ packages:
 
   caniuse-lite@1.0.30001799:
     resolution: {integrity: sha512-hG1bReV+OUU+MOqK4t/ZWI0tZOyz3rqS9XuhOUz1cIcbwBKjOyJEJuw9ER5JuNyqxNk8u/JUVbGibBOL1yrjFw==}
+
+  caniuse-lite@1.0.30001800:
+    resolution: {integrity: sha512-MMHtuAz9Ys840zAY5F4k6fV5GaivZ9sPk+nz0mY+GYVzRBnYkN0mpqkSR92oWRQ19yQWo4HvBV/FnC16AJX8MA==}
 
   chart.js@4.5.1:
     resolution: {integrity: sha512-GIjfiT9dbmHRiYi6Nl2yFCq7kkwdkp1W/lp2J99rX0yo9tgJGn3lKQATztIjb5tVtevcBtIdICNWqlq5+E8/Pw==}
@@ -1175,6 +1188,9 @@ packages:
 
   electron-to-chromium@1.5.376:
     resolution: {integrity: sha512-cUVA7/RvbFTEuw/i3obUwDTRIXojaxkResf+ibByPFxjc6XK3VNtcQXV0NSbAlJ0FMjcJGgftVVB4Qo184EXvA==}
+
+  electron-to-chromium@1.5.383:
+    resolution: {integrity: sha512-I2484/KkAvl8lm9VyjH2JnbOIV0d/UCqT7gbzs6l+o6Vmn9wgB66uVcKX+Vk6HrXtY6fbWTOEXuv8waDTuFNCw==}
 
   enhanced-resolve@5.21.6:
     resolution: {integrity: sha512-aNnGCvbJ/RIyWo1IuhNdVjnNF+EjH9wpzpNHt+ci/m9He9LJvUN8wrCcXjp9cWsGNAuvSpVFTx/vraAFQ8qGjQ==}
@@ -1470,8 +1486,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-react@1.21.0:
-    resolution: {integrity: sha512-reEZMXq8Qdd5jg5XYkQ5TR1fB/GiQ7ih4vcrthYDtgjSDwh0i6/YLiGjsWsIwgN49gpAnd4J2elSNzncMEEUUQ==}
+  lucide-react@1.22.0:
+    resolution: {integrity: sha512-c9o3l0PiNcgOQDW4F31BEYHudE7kgxVt3o30qMl36ZPwTxXlGB4QnLilhERvVM4uh/pl5MDyY1/gzZSYcHDtBg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -1498,6 +1514,10 @@ packages:
 
   node-releases@2.0.48:
     resolution: {integrity: sha512-1uz8041X6LoI6ZSdZacM9lVY28vuzDlSKitnpbSNK0RfKoIJkX29NBPVEFXhnuSuEOA9Ww0xnPJ+ILWbGAv8DA==}
+    engines: {node: '>=18'}
+
+  node-releases@2.0.50:
+    resolution: {integrity: sha512-J6l92tKHX6w8Jy5nO1Vuc01NoIiRGi/d6qBKVxh+IQ8Cr3b6HbVNfKiF8ZpFKufTwpwxMmce2W3iQZ861ZRyTg==}
     engines: {node: '>=18'}
 
   optionator@0.9.4:
@@ -1846,7 +1866,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.2
+      browserslist: 4.28.4
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -2738,6 +2758,8 @@ snapshots:
 
   baseline-browser-mapping@2.10.38: {}
 
+  baseline-browser-mapping@2.10.40: {}
+
   brace-expansion@5.0.6:
     dependencies:
       balanced-match: 4.0.4
@@ -2750,11 +2772,21 @@ snapshots:
       node-releases: 2.0.48
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
+  browserslist@4.28.4:
+    dependencies:
+      baseline-browser-mapping: 2.10.40
+      caniuse-lite: 1.0.30001800
+      electron-to-chromium: 1.5.383
+      node-releases: 2.0.50
+      update-browserslist-db: 1.2.3(browserslist@4.28.4)
+
   callsites@3.1.0: {}
 
   camelcase@6.3.0: {}
 
   caniuse-lite@1.0.30001799: {}
+
+  caniuse-lite@1.0.30001800: {}
 
   chart.js@4.5.1:
     dependencies:
@@ -2803,6 +2835,8 @@ snapshots:
       tslib: 2.8.1
 
   electron-to-chromium@1.5.376: {}
+
+  electron-to-chromium@1.5.383: {}
 
   enhanced-resolve@5.21.6:
     dependencies:
@@ -3062,7 +3096,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react@1.21.0(react@19.2.7):
+  lucide-react@1.22.0(react@19.2.7):
     dependencies:
       react: 19.2.7
 
@@ -3086,6 +3120,8 @@ snapshots:
       tslib: 2.8.1
 
   node-releases@2.0.48: {}
+
+  node-releases@2.0.50: {}
 
   optionator@0.9.4:
     dependencies:
@@ -3262,6 +3298,12 @@ snapshots:
   update-browserslist-db@1.2.3(browserslist@4.28.2):
     dependencies:
       browserslist: 4.28.2
+      escalade: 3.2.0
+      picocolors: 1.1.1
+
+  update-browserslist-db@1.2.3(browserslist@4.28.4):
+    dependencies:
+      browserslist: 4.28.4
       escalade: 3.2.0
       picocolors: 1.1.1
 
