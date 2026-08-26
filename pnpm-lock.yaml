@@ -80,7 +80,7 @@ importers:
         version: 8.67.0(eslint@10.8.1(jiti@2.7.0))(typescript@7.0.2)
       '@vitejs/plugin-react-swc':
         specifier: ^4.0.0
-        version: 4.3.3(vite@8.2.1(@types/node@24.13.3)(jiti@2.7.0))
+        version: 4.3.3(vite@8.2.2(@types/node@24.13.3)(jiti@2.7.0))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.5.4(postcss@8.5.26)
@@ -104,13 +104,13 @@ importers:
         version: 7.0.2
       vite:
         specifier: ^8.0.0
-        version: 8.2.1(@types/node@24.13.3)(jiti@2.7.0)
+        version: 8.2.2(@types/node@24.13.3)(jiti@2.7.0)
       vite-plugin-sitemap:
         specifier: ^0.8.2
         version: 0.8.2
       vite-plugin-svgr:
         specifier: ^5.0.0
-        version: 5.2.0(typescript@7.0.2)(vite@8.2.1(@types/node@24.13.3)(jiti@2.7.0))
+        version: 5.2.0(typescript@7.0.2)(vite@8.2.2(@types/node@24.13.3)(jiti@2.7.0))
 
 packages:
 
@@ -1901,13 +1901,13 @@ packages:
     peerDependencies:
       vite: '>=3.0.0'
 
-  vite@8.2.1:
-    resolution: {integrity: sha512-EU/eS7BH3XROHh2YnBefjM6DBKA6ZeMZEYQbj7NLWg5wHYlhB8B/Mayd5XsgWq+NFYccDOTemRpdETWR6Ka/lw==}
+  vite@8.2.2:
+    resolution: {integrity: sha512-cFKLV/PRgAUlIRm5WjMjJ86jrftzpqcgH+Us+DS8mI3CDNiH30Whrz8uHL3+MOLPAgqbMBAqWdAHAphOAM+z/Q==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
       '@types/node': ^20.19.0 || >=22.12.0
-      '@vitejs/devtools': ^0.4.0
+      '@vitejs/devtools': ^0.4.0 || ^0.5.0
       esbuild: ^0.27.0 || ^0.28.0
       jiti: '>=1.21.0'
       less: ^4.0.0
@@ -2893,11 +2893,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitejs/plugin-react-swc@4.3.3(vite@8.2.1(@types/node@24.13.3)(jiti@2.7.0))':
+  '@vitejs/plugin-react-swc@4.3.3(vite@8.2.2(@types/node@24.13.3)(jiti@2.7.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       '@swc/core': 1.16.0
-      vite: 8.2.1(@types/node@24.13.3)(jiti@2.7.0)
+      vite: 8.2.2(@types/node@24.13.3)(jiti@2.7.0)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -3556,18 +3556,18 @@ snapshots:
 
   vite-plugin-sitemap@0.8.2: {}
 
-  vite-plugin-svgr@5.2.0(typescript@7.0.2)(vite@8.2.1(@types/node@24.13.3)(jiti@2.7.0)):
+  vite-plugin-svgr@5.2.0(typescript@7.0.2)(vite@8.2.2(@types/node@24.13.3)(jiti@2.7.0)):
     dependencies:
       '@rollup/pluginutils': 5.4.0
       '@svgr/core': 8.1.0(typescript@7.0.2)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@7.0.2))
-      vite: 8.2.1(@types/node@24.13.3)(jiti@2.7.0)
+      vite: 8.2.2(@types/node@24.13.3)(jiti@2.7.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
 
-  vite@8.2.1(@types/node@24.13.3)(jiti@2.7.0):
+  vite@8.2.2(@types/node@24.13.3)(jiti@2.7.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
